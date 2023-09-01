@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+import { Error } from "mongoose";
 const DB_URL = process.env.DATABASE_URL;
 
 console.log("db-url", DB_URL);
@@ -10,7 +11,7 @@ mongoose
   .then(() => {
     console.log("Connected to database");
   })
-  .catch((err) => {
+  .catch((err:Error) => {
     console.error("Database connection error:", err);
   });
 
