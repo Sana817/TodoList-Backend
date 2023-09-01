@@ -1,6 +1,13 @@
+import { Request,Response, } from "express";
 const todoListModel = require("../Models/TodoListModel");
 
-const getAllTasks = async (req, res) => {
+interface RequestWithUser extends Request {
+  user: {
+    userId: string;
+  };
+}
+
+const getAllTasks= async (req:RequestWithUser, res:Response) => {
   const user = req.user.userId;
   try {
     const result = await todoListModel.find({ user: user });
@@ -10,10 +17,12 @@ const getAllTasks = async (req, res) => {
   }
 };
 
-const addTask = async (req, res) => {
+const addTask = async (req:RequestWithUser, res:Response) => {
   const { task, editing } = req.body;
+  console.log("task",task);
   const user = req.user.userId;
   try {
+    
     const newTask = new todoListModel({ user: user, task, editing });
     const result = await newTask.save();
     if (result) res.json(result);
@@ -22,7 +31,7 @@ const addTask = async (req, res) => {
   }
 };
 
-const removeTask = async (req, res) => {
+const removeTask = async (req:Request, res:Response) => {
   const id = req.params.id;
   try {
     const result = await todoListModel.findByIdAndDelete(id);
@@ -32,7 +41,7 @@ const removeTask = async (req, res) => {
   }
 };
 
-const updateTask = async (req, res) => {
+const updateTask = async (req:Request, res:Response) => {
   const { task, editing } = req.body;
 
   try {
